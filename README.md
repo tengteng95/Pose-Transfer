@@ -1,7 +1,7 @@
 # Pose-Transfer
 Code for the paper **Progressive Pose Attention for Person Image Generation** in CVPR19. We will release the code soon later.
 
-<img src='imgs/results.png width=800'>
+<img src='imgs/results.png' width=800>
 
 This is Pytorch implementation for pose transfer task on both Market1501 and DeepFashion dataset. The code is written by 
 
