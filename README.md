@@ -16,8 +16,36 @@ This is Pytorch implementation for pose transfer on both Market1501 and DeepFash
 * tqdm
 * dominate
 
-## Getting Started
 
+## Getting Started
+### Installation
+
+- Clone this repo:
+```bash
+git clone https://github.com/tengteng95/Pose-Transfer.git
+cd Pose-Transfer
+```
+
+### Data Preperation
+#### Market1501
+- Download the Market1501 dataset from [here](http://www.liangzheng.com.cn/Project/project_reid.html).
+
+#### DeepFashion
+- Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html)
+
+#### Pose Estimation
+- Download the pose estimator from [here](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation).
+- Launch ```python compute_cordinates.py``` to get the pose estimation for both datasets.
+
+OR you can download our generated pose estimations from here. (Coming soon.) 
+
+### Train a model
+
+
+### Test the model
+
+
+### Pre-trained model 
 
 ## Citation
 If you use this code for your research, please cite our paper.
