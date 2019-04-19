@@ -1,5 +1,5 @@
 # Pose-Transfer
-Code for the paper **Progressive Pose Attention for Person Image Generation** in CVPR19. The paper is available [here](http://arxiv.org/abs/1904.03349).
+Code for the paper **Progressive Pose Attention for Person Image Generation** in CVPR19. The paper is available [here](http://arxiv.org/abs/1904.03349). The video demo is coming soon.
 
 <img src='imgs/results.png' width=800>
 
@@ -35,7 +35,7 @@ cd Pose-Transfer
 
 #### DeepFashion
 <!-- - Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html) -->
-- Download the DeepFashon dataset from [here](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw)
+- Download the DeepFashon dataset from [here](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw). Unzip ```train.zip``` and ```test.zip``` into the ```fashion_data``` directory.
 - Download train/test splits and train/test key points annotations from [here](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
 - Launch ```python tool/generate_pose_map_fashion.py``` to generate the pose heatmaps.
 
@@ -71,7 +71,7 @@ python test.py --dataroot ./fashion_data/ --name fashion_PATN_test --model PATN 
 
 
 ### Pre-trained model 
-Our pre-trained model can be downloaded [here]().
+Our pre-trained model can be downloaded [here](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw).
 
 ## Citation
 If you use this code for your research, please cite our paper.
