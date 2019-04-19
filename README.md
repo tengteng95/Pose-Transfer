@@ -29,14 +29,14 @@ cd Pose-Transfer
 ### Data Preperation
 #### Market1501
 - Download the Market-1501 dataset from [here](http://www.liangzheng.com.cn/Project/project_reid.html). Rename **bounding_box_train** and **bounding_box_test** to **train** and **test**, and put them under the ```market_data``` directory.
-- Download train/test splits and train/test key points annotations from [here](), including **market-pairs-train.csv**, **market-pairs-test.csv**, **market-annotation-train.csv**, **market-annotation-train.csv**. Put these four files under the ```market_data``` directory.
+- Download train/test splits and train/test key points annotations from [here](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw), including **market-pairs-train.csv**, **market-pairs-test.csv**, **market-annotation-train.csv**, **market-annotation-train.csv**. Put these four files under the ```market_data``` directory.
 - Launch ```python tool/generate_pose_map_market.py``` to generate the pose heatmaps.
 
 
 #### DeepFashion
-- Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html)
-- Download 
-- Download train/test splits and train/test key points annotations from [here](), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
+<!-- - Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html) -->
+- Download the DeepFashon dataset from [here](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw)
+- Download train/test splits and train/test key points annotations from [here](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
 - Launch ```python tool/generate_pose_map_fashion.py``` to generate the pose heatmaps.
 
 <!-- #### Pose Estimation
