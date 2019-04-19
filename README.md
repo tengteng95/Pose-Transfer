@@ -28,28 +28,60 @@ cd Pose-Transfer
 
 ### Data Preperation
 #### Market1501
-- Download the Market1501 dataset from [here](http://www.liangzheng.com.cn/Project/project_reid.html).
+- Download the Market-1501 dataset from [here](http://www.liangzheng.com.cn/Project/project_reid.html). Rename **bounding_box_train** and **bounding_box_test** to **train** and **test**, and put them under the ```market_data``` directory.
+- Download train/test splits and train/test key points annotations from [here](), including **market-pairs-train.csv**, **market-pairs-test.csv**, **market-annotation-train.csv**, **market-annotation-train.csv**. Put these four files under the ```market_data``` directory.
+- Launch ```python tool/generate_pose_map_market.py``` to generate the pose heatmaps.
+
 
 #### DeepFashion
 - Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html)
+- Download 
+- Download train/test splits and train/test key points annotations from [here](), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
+- Launch ```python tool/generate_pose_map_fashion.py``` to generate the pose heatmaps.
 
-#### Pose Estimation
+<!-- #### Pose Estimation
 - Download the pose estimator from [here](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation).
 - Launch ```python compute_cordinates.py``` to get the pose estimation for both datasets.
 
-OR you can download our generated pose estimations from here. (Coming soon.) 
+OR you can download our generated pose estimations from here. (Coming soon.) --> 
 
 ### Train a model
+Market-1501
+```bash
+python train.py --dataroot ./market_data/ --name market_PATN --model PATN --lambda_GAN 5 --lambda_A 10  --lambda_B 10 --dataset_mode keypoint --no_lsgan --n_layers 3 --norm batch --batchSize 32 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --niter 500 --niter_decay 200 --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-train.csv --L1_type l1_plus_perL1 --n_layers_D 3 --with_D_PP 1 --with_D_PB 1  --display_id 0
+```
+
+DeepFashion
+```bash
+python train.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --lambda_GAN 5 --lambda_A 1 --lambda_B 1 --dataset_mode keypoint --n_layers 3 --norm instance --batchSize 7 --pool_size 0 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --niter 500 --niter_decay 200 --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-train.csv --L1_type l1_plus_perL1 --n_layers_D 3 --with_D_PP 1 --with_D_PB 1  --display_id 0
+```
 
 
 ### Test the model
+Market1501
+```bash
+python test.py --dataroot ./market_data/ --name market_PATN_test --model PATN --phase test --dataset_mode keypoint --norm batch --batchSize 1 --resize_or_crop no --gpu_ids 2 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-test.csv --which_epoch latest --results_dir ./results
+```
+
+
+DeepFashion
+```bash
+python test.py --dataroot ./fashion_data/ --name fashion_PATN_test --model PATN --phase test --dataset_mode keypoint --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results
+```
 
 
 ### Pre-trained model 
+Our pre-trained model can be downloaded [here]().
 
 ## Citation
 If you use this code for your research, please cite our paper.
 ```
+@article{zhu2019progressive,
+  title={Progressive Pose Attention Transfer for Person Image Generation},
+  author={Zhu, Zhen and Huang, Tengteng and Shi, Baoguang and Yu, Miao and Wang, Bofei and Bai, Xiang},
+  journal={arXiv preprint arXiv:1904.03349},
+  year={2019}
+}
 ```
 
 ### Acknowledgments
