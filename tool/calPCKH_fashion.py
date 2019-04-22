@@ -7,8 +7,9 @@ MISSING_VALUE = -1
 
 PARTS_SEL = [0, 1, 14, 15, 16, 17]
 
-target_annotation = 'fashion_data/fasion-resize-annotation-test.csv'
-pred_annotation = 'xxx/pred.csv'
+target_annotation = './fashion_data/fasion-resize-annotation-test.csv'
+pred_annotation = './results/fashion_PATN/pckh.csv'
+
 
 '''
   hz: head size

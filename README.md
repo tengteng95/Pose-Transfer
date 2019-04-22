@@ -60,18 +60,57 @@ python train.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --la
 ### Test the model
 Market1501
 ```bash
-python test.py --dataroot ./market_data/ --name market_PATN_test --model PATN --phase test --dataset_mode keypoint --norm batch --batchSize 1 --resize_or_crop no --gpu_ids 2 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-test.csv --which_epoch latest --results_dir ./results
+python test.py --dataroot ./market_data/ --name market_PATN --model PATN --phase test --dataset_mode keypoint --norm batch --batchSize 1 --resize_or_crop no --gpu_ids 2 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-test.csv --which_epoch latest --results_dir ./results
 ```
 
 
 DeepFashion
 ```bash
-python test.py --dataroot ./fashion_data/ --name fashion_PATN_test --model PATN --phase test --dataset_mode keypoint --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results
+python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --phase test --dataset_mode keypoint --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results
 ```
+
+### Evaluation
+We adopt SSIM, mask-SSIM, IS, mask-IS, DS, and PCKh for evaluation of Market-1501. SSIM, IS, DS, PCKh for DeepFashion.
+
+#### SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
+For Market-1501:
+```bash
+python tool/getMetrics_market.py
+```
+
+For DeepFashion:
+```bash
+python tool/getMetrics_market.py
+```
+
+#### DS
+Download pretrained on VOC 300x300 model and install propper caffe version [SSD](https://github.com/weiliu89/caffe/tree/ssd). Put it in the ssd_score forlder. 
+
+For Market-1501:
+```bash
+python compute_ssd_score_market.py --input_dir path/to/generated/images
+```
+
+For DeepFashion:
+```bash
+python compute_ssd_score_fashion.py --input_dir path/to/generated/images
+```
+
+#### PCKh
+For PCKh evaluation, **Tensorflow 1.4.1** is required.
+- First, run ``tool/crop_market.py`` or ``tool/crop_fashion.py``.
+- Download pose estimator from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg). Put it under the root folder ``Pose-Transfer``.
+- Change the paths **input_folder**  and **output_path** in ``tool/compute_coordinates.py``. And then launch
+```bash
+python2 compute_coordinates.py
+```
+- run ``tool/calPCKH_fashion.py`` or ``tool/calPCKH_market.py``
+
 
 
 ### Pre-trained model 
 Our pre-trained model can be downloaded [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg).
+
 
 ## Citation
 If you use this code for your research, please cite our paper.

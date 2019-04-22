@@ -8,8 +8,8 @@ MISSING_VALUE = -1
 PARTS_SEL = [0, 1, 14, 15, 16, 17]
 
 # fix the PATH
-target_annotation = 'market_data/market-annotation-test.csv'
-pred_annotation = 'xxx/pred.csv'
+target_annotation = './market_data/market-annotation-test.csv'
+pred_annotation = '/results/market_PATN/pckh.csv'
 
 
 '''
