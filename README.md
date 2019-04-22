@@ -72,7 +72,7 @@ python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --pha
 ### Evaluation
 We adopt SSIM, mask-SSIM, IS, mask-IS, DS, and PCKh for evaluation of Market-1501. SSIM, IS, DS, PCKh for DeepFashion.
 
-#### SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
+#### 1) SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
 For Market-1501:
 ```bash
 python tool/getMetrics_market.py
@@ -83,7 +83,7 @@ For DeepFashion:
 python tool/getMetrics_market.py
 ```
 
-#### DS
+#### 2) DS Score
 Download pretrained on VOC 300x300 model and install propper caffe version [SSD](https://github.com/weiliu89/caffe/tree/ssd). Put it in the ssd_score forlder. 
 
 For Market-1501:
@@ -96,7 +96,7 @@ For DeepFashion:
 python compute_ssd_score_fashion.py --input_dir path/to/generated/images
 ```
 
-#### PCKh
+#### 3) PCKh
 For PCKh evaluation, **Tensorflow 1.4.1** is required.
 - First, run ``tool/crop_market.py`` or ``tool/crop_fashion.py``.
 - Download pose estimator from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg). Put it under the root folder ``Pose-Transfer``.
