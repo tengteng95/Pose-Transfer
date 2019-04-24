@@ -1,6 +1,9 @@
 # Pose-Transfer
 Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). The video demo is coming soon.
 
+
+**We are now adapting the codes to pytorch 1.0.**
+
 <img src='imgs/results.png' width=800>
 
 This is Pytorch implementation for pose transfer on both Market1501 and DeepFashion dataset. The code is written by [Tengteng Huang](https://github.com/tengteng95) and [Zhen Zhu](https://github.com/jessemelpolio).
