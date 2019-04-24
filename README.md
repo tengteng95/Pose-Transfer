@@ -3,7 +3,7 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
 
 
 ## News 
-[19/4/24] Codes for pytorch 1.0 is available now under the branch **pytorch_v1.0**. The same results on both datasets can be reproduced as our pytorch 0.3 version with the pretrained model. 
+[19/4/24] Codes for pytorch 1.0 is available now under the branch **pytorch_v1.0**. The same results on both datasets can be reproduced with the pretrained model. 
 
 <img src='imgs/results.png' width=800>
 
