@@ -1,5 +1,5 @@
 # Pose-Transfer
-Code for the paper **Progressive Pose Attention for Person Image Generation** in CVPR19 (**Oral**). The paper is available [here](http://arxiv.org/abs/1904.03349). The video demo is coming soon.
+Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). The video demo is coming soon.
 
 <img src='imgs/results.png' width=800>
 
