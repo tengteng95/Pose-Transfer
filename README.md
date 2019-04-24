@@ -2,7 +2,8 @@
 Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). The video demo is coming soon.
 
 
-**We are now adapting the codes to pytorch 1.0.**
+## News 
+[19/4/24] Codes for pytorch 1.0 is available now under the branch **pytorch_v1.0**. We have reproduced the same results on both datasets as our pytorch 0.3 version. 
 
 <img src='imgs/results.png' width=800>
 
