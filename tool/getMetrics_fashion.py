@@ -111,7 +111,7 @@ def test(generated_images_dir, annotations_file_test):
 
 if __name__ == "__main__":
     # fix these paths
-    generated_images_dir = 'results/fashion_PATN/test_latest/images'
+    generated_images_dir = 'results_v1.0/fashion_PATN_v1.0/test_latest/images'
     annotations_file_test = 'fashion_data/fasion-resize-annotation-test.csv'
 
     test(generated_images_dir, annotations_file_test)

@@ -39,8 +39,8 @@ In pytorch 1.0, **running_mean** and **running_var** are not saved for the **Ins
 This is Pytorch implementation for pose transfer on both Market1501 and DeepFashion dataset. The code is written by [Tengteng Huang](https://github.com/tengteng95) and [Zhen Zhu](https://github.com/jessemelpolio).
 
 ## Requirement
-* pytorch(0.3.1)
-* torchvision(0.2.0)
+* pytorch 1.0.1
+* torchvision
 * numpy
 * scipy
 * scikit-image
@@ -190,6 +190,9 @@ python2 compute_coordinates.py
 
 ### Pre-trained model 
 Our pre-trained model can be downloaded [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg).
+
+#### Notes
+In pytorch 1.0, **running_mean** and **running_var** are not saved for **InstanceNorm** layer by default. To reproduce our result in the paper, launch ``python tool/rm_insnorm_running_vars.py`` to remove corresponding keys in the state_dicts. (Only for the DeepFashion dataset.)
 
 
 ## Citation

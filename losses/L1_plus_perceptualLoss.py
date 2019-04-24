@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 import torch
 from torch import nn
-from torch.autograd import Variable
 import numpy as np
 import torch.nn.functional as F
 import torchvision.models as models
@@ -29,7 +28,7 @@ class L1_plus_perceptualLoss(nn.Module):
 
     def forward(self, inputs, targets):
         if self.lambda_L1 == 0 and self.lambda_perceptual == 0:
-            return Variable(torch.zeros(1)).cuda(), Variable(torch.zeros(1)), Variable(torch.zeros(1))
+            return torch.zeros(1).cuda(), torch.zeros(1), torch.zeros(1)
         # normal L1
         loss_l1 = F.l1_loss(inputs, targets) * self.lambda_L1
 
@@ -38,14 +37,12 @@ class L1_plus_perceptualLoss(nn.Module):
         mean[0] = 0.485
         mean[1] = 0.456
         mean[2] = 0.406
-        mean = Variable(mean)
         mean = mean.resize(1, 3, 1, 1).cuda()
 
         std = torch.FloatTensor(3)
         std[0] = 0.229
         std[1] = 0.224
         std[2] = 0.225
-        std = Variable(std)
         std = std.resize(1, 3, 1, 1).cuda()
 
         fake_p2_norm = (inputs + 1)/2 # [-1, 1] => [0, 1]
