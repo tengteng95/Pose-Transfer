@@ -60,7 +60,8 @@ cd Pose-Transfer
 ```
 
 ### Data Preperation
-We provide our **dataset split files** and **extracted keypoints files** for convience.
+
+We use [OpenPose](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation) to generate keypoints, and provide our **dataset split files** and **extracted keypoints files** for convience.
 
 #### Market1501
 - Download the Market-1501 dataset from [here](http://www.liangzheng.com.cn/Project/project_reid.html). Rename **bounding_box_train** and **bounding_box_test** to **train** and **test**, and put them under the ```market_data``` directory.
