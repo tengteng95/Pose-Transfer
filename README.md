@@ -77,6 +77,7 @@ We adopt SSIM, mask-SSIM, IS, mask-IS, DS, and PCKh for evaluation of Market-150
 
 #### 1) SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
 For evaluation, **Tensorflow 1.4.1(python3)** is required.
+
 For Market-1501:
 ```bash
 python tool/getMetrics_market.py
