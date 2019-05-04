@@ -140,8 +140,7 @@ python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --pha
 We adopt SSIM, mask-SSIM, IS, mask-IS, DS, and PCKh for evaluation of Market-1501. SSIM, IS, DS, PCKh for DeepFashion.
 
 #### 1) SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
-
-For evaluation, **Tensorflow 1.4.1(python3)** is required. Please see ``requirements_tf.txt`` for details.
+For evaluation, **Tensorflow 1.4.1(python3)** is required.
 
 For Market-1501:
 ```bash
@@ -178,7 +177,6 @@ python compute_ssd_score_fashion.py --input_dir path/to/generated/images
 ```
 
 #### 3) PCKh
-
 - First, run ``tool/crop_market.py`` or ``tool/crop_fashion.py``.
 - Download pose estimator from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg). Put it under the root folder ``Pose-Transfer``.
 - Change the paths **input_folder**  and **output_path** in ``tool/compute_coordinates.py``. And then launch
