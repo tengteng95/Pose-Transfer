@@ -76,7 +76,8 @@ python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --pha
 We adopt SSIM, mask-SSIM, IS, mask-IS, DS, and PCKh for evaluation of Market-1501. SSIM, IS, DS, PCKh for DeepFashion.
 
 #### 1) SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
-For evaluation, **Tensorflow 1.4.1(python3)** is required.
+
+For evaluation, **Tensorflow 1.4.1(python3)** is required. Please see ``requirements_tf.txt`` for details.
 
 For Market-1501:
 ```bash
@@ -87,6 +88,17 @@ For DeepFashion:
 ```bash
 python tool/getMetrics_market.py
 ```
+
+If you still have problems for evaluation, please consider using **docker**. 
+
+```bash
+docker run -v <Pose-Transfer path>:/tmp -w /tmp --runtime=nvidia -it --rm tensorflow/tensorflow:1.4.1-gpu-py3 bash
+# now in docker:
+$ pip install scikit-image tqdm 
+$ python tool/getMetrics_market.py
+```
+
+Refer to [this Issue](https://github.com/tengteng95/Pose-Transfer/issues/4).
 
 #### 2) DS Score
 Download pretrained on VOC 300x300 model and install propper caffe version [SSD](https://github.com/weiliu89/caffe/tree/ssd). Put it in the ssd_score forlder. 
