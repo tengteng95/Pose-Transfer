@@ -140,7 +140,8 @@ python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --pha
 We adopt SSIM, mask-SSIM, IS, mask-IS, DS, and PCKh for evaluation of Market-1501. SSIM, IS, DS, PCKh for DeepFashion.
 
 #### 1) SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
-For evaluation, **Tensorflow 1.4.1(python3)** is required.
+
+For evaluation, **Tensorflow 1.4.1(python3)** is required. Please see ``requirements_tf.txt`` for details.
 
 For Market-1501:
 ```bash
