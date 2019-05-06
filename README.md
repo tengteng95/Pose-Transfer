@@ -80,7 +80,18 @@ We adopt SSIM, mask-SSIM, IS, mask-IS, DS, and PCKh for evaluation of Market-150
 
 #### 1) SSIM and mask-SSIM, IS and mask-IS, mask-SSIM
 
-For evaluation, **Tensorflow 1.4.1(python3)** is required.
+For evaluation, **Tensorflow 1.4.1(python3)** is required. Please see ``requirements_tf.txt`` for details.
+
+If you still have problems for evaluation, please consider using docker. 
+
+```bash
+docker run -v <Pose-Transfer path>:/tmp -w /tmp --runtime=nvidia -it --rm tensorflow/tensorflow:1.4.1-gpu-py3 bash
+# now in docker:
+$ pip install scikit-image tqdm 
+$ python tool/getMetrics_market.py
+```
+
+Refer to [this Issue](https://github.com/tengteng95/Pose-Transfer/issues/4).
 
 For Market-1501:
 ```bash
