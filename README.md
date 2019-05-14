@@ -1,12 +1,19 @@
 # Pose-Transfer
 Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). 
 
-<figure class="fourth">
+<p float="left">
+  	<img src='imgs/walkfront.gif' width="100"/>
+	<img src='imgs/dance.gif' width="100"/>
+    <img src='imgs/dance2.gif' width="100"/>
+    <img src='imgs/dance3.gif' width="100"/>
+</p>
+
+<!-- <figure class="fourth">
 	<img src='imgs/walkfront.gif' width="100"/>
 	<img src='imgs/dance.gif' width="100"/>
     <img src='imgs/dance2.gif' width="100"/>
     <img src='imgs/dance3.gif' width="100"/>
-</figure>
+</figure> -->
 
 <!-- <img src='imgs/walkfront.gif' width=100>
 <img src='imgs/dance.gif' width=100> -->
