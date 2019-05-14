@@ -1,7 +1,7 @@
 # Pose-Transfer
 Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). 
 
-<center class="half">
+<center class="fourth">
 	<img src='imgs/walkfront.gif' width="100"/>
 	<img src='imgs/dance.gif' width="100"/>
     <img src='imgs/dance2.gif' width="100"/>
