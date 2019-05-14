@@ -1,9 +1,13 @@
 # Pose-Transfer
-Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). The video demo is coming soon.
+Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). 
 
+<img src='imgs/walkfront.png' width=200>
+<img src='imgs/dance.png' width=200>
 
 ## News 
-[19/4/24] Codes for pytorch 1.0 is available now under the branch **pytorch_v1.0**. The same results on both datasets can be reproduced with the pretrained model. 
+- [Video demo](https://youtu.be/bNHFPMX9BVk) is available now. 
+- Codes for pytorch 1.0 is available now under the branch **pytorch_v1.0**. The same results on both datasets can be reproduced with the pretrained model. 
+
 
 <img src='imgs/results.png' width=800>
 
