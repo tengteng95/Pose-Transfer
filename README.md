@@ -35,8 +35,8 @@ Video generation with a single image as input. More details can be found in the 
 This is Pytorch implementation for pose transfer on both Market1501 and DeepFashion dataset. The code is written by [Tengteng Huang](https://github.com/tengteng95) and [Zhen Zhu](https://github.com/jessemelpolio).
 
 ## Requirement
-* pytorch 0.3.1
-* torchvision
+* pytorch(0.3.1)
+* torchvision(0.2.0)
 * numpy
 * scipy
 * scikit-image
@@ -91,13 +91,13 @@ python train.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --la
 ### Test the model
 Market1501
 ```bash
-python test.py --dataroot ./market_data/ --name market_PATN --model PATN --phase test --dataset_mode keypoint --norm batch --batchSize 1 --resize_or_crop no --gpu_ids 2 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-test.csv --which_epoch latest --results_dir ./results
+python test.py --dataroot ./market_data/ --name market_PATN --model PATN --phase test --dataset_mode keypoint --norm batch --batchSize 1 --resize_or_crop no --gpu_ids 2 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-test.csv --which_epoch latest --results_dir ./results --display_id 0
 ```
 
 
 DeepFashion
 ```bash
-python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --phase test --dataset_mode keypoint --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results
+python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --phase test --dataset_mode keypoint --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results --display_id 0
 ```
 
 ### Evaluation
