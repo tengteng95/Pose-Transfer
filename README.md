@@ -74,6 +74,7 @@ We provide our **dataset split files** and **extracted keypoints files** for con
 **Optionally, you can also generate these files by yourself.**
 
 1. Keypoints files
+
 We use [OpenPose](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation) to generate keypoints. 
 
 - Download pose estimator from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg). Put it under the root folder ``Pose-Transfer``.
@@ -83,6 +84,7 @@ python2 compute_coordinates.py
 ```
 
 2. Dataset split files
+
 ```bash
 python2 tool/create_pairs_dataset.py
 ```
