@@ -49,7 +49,6 @@ This is Pytorch implementation for pose transfer on both Market1501 and DeepFash
 * tqdm
 * dominate
 
-
 ## Getting Started
 ### Installation
 
@@ -191,7 +190,7 @@ python2 compute_coordinates.py
 ### Pre-trained model 
 Our pre-trained model can be downloaded [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg).
 
-##### Notes:
+### Notes:
 In pytorch 1.0, **running_mean** and **running_var** are not saved for the **Instance Normalization layer** by default. To reproduce our result in the paper, launch ``python tool/rm_insnorm_running_vars.py`` to remove corresponding keys in the pretrained model. (Only for the DeepFashion dataset.)
 
 
