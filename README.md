@@ -16,7 +16,6 @@ This is Pytorch implementation for pose transfer on both Market1501 and DeepFash
 * tqdm
 * dominate
 
-
 ## Getting Started
 ### Installation
 
@@ -38,7 +37,7 @@ We use [OpenPose](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation)
 
 #### DeepFashion
 <!-- - Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html) -->
-- Download [deep fasion dataset in-shop clothes retrival benchmark](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html). You will need to ask a pasword from dataset maintainers.
+- Download [deep fasion dataset in-shop clothes retrival benchmark](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html). You will need to ask a pasword from dataset maintainers. Launch ```python tool/generate_fashion_datasets.py``` to split the raw dataset into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). 
 - Download train/test splits and train/test key points annotations from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
 - Launch ```python tool/generate_pose_map_fashion.py``` to generate the pose heatmaps.
 
@@ -127,7 +126,7 @@ python2 compute_coordinates.py
 ### Pre-trained model 
 Our pre-trained model can be downloaded [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg).
 
-##### Notes:
+### Notes:
 In pytorch 1.0, **running_mean** and **running_var** are not saved for the **Instance Normalization layer** by default. To reproduce our result in the paper, launch ``python tool/rm_insnorm_running_vars.py`` to remove corresponding keys in the pretrained model. (Only for the DeepFashion dataset.)
 
 
