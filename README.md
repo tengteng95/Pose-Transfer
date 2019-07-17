@@ -133,10 +133,11 @@ In pytorch 1.0, **running_mean** and **running_var** are not saved for the **Ins
 ## Citation
 If you use this code for your research, please cite our paper.
 ```
-@article{zhu2019progressive,
+@inproceedings{zhu2019progressive,
   title={Progressive Pose Attention Transfer for Person Image Generation},
   author={Zhu, Zhen and Huang, Tengteng and Shi, Baoguang and Yu, Miao and Wang, Bofei and Bai, Xiang},
-  journal={arXiv preprint arXiv:1904.03349},
+  booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  pages={2347--2356},
   year={2019}
 }
 ```
