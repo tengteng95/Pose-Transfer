@@ -69,9 +69,16 @@ We provide our **dataset split files** and **extracted keypoints files** for con
 
 #### DeepFashion
 <!-- - Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html) -->
-- Download [deep fasion dataset in-shop clothes retrival benchmark](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html). You will need to ask a pasword from dataset maintainers. Launch ```python tool/generate_fashion_datasets.py``` to split the raw dataset into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). Then crop the images into 256x176 in a center-crop manner. [Here](https://github.com/tengteng95/Pose-Transfer/issues/24) demonstrates how to convert the raw path of images into the format in the data split files (.lst).
-- Download train/test splits and train/test key points annotations from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
-- Launch ```python tool/generate_pose_map_fashion.py``` to generate the pose heatmaps.
+- Download [deep fasion dataset in-shop clothes retrival benchmark](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html). You will need to ask a pasword from dataset maintainers. 
+- Split the raw images into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). Launch
+```bash
+python tool/generate_fashion_datasets.py
+``` 
+- Download train/test pairs and train/test key points annotations from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
+- generate the pose heatmaps. Launch
+```bash
+python tool/generate_pose_map_fashion.py
+```
 
 #### Notes:
 **Optionally, you can also generate these files by yourself.**
