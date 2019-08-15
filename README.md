@@ -64,7 +64,10 @@ We provide our **dataset split files** and **extracted keypoints files** for con
 #### Market1501
 - Download the Market-1501 dataset from [here](http://www.liangzheng.com.cn/Project/project_reid.html). Rename **bounding_box_train** and **bounding_box_test** to **train** and **test**, and put them under the ```market_data``` directory.
 - Download train/test splits and train/test key points annotations from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg), including **market-pairs-train.csv**, **market-pairs-test.csv**, **market-annotation-train.csv**, **market-annotation-train.csv**. Put these four files under the ```market_data``` directory.
-- Launch ```python tool/generate_pose_map_market.py``` to generate the pose heatmaps.
+- Generate the pose heatmaps. Launch
+```bash
+python tool/generate_pose_map_market.py
+```
 
 
 #### DeepFashion
@@ -75,7 +78,7 @@ We provide our **dataset split files** and **extracted keypoints files** for con
 python tool/generate_fashion_datasets.py
 ``` 
 - Download train/test pairs and train/test key points annotations from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg), including **fasion-resize-pairs-train.csv**, **fasion-resize-pairs-test.csv**, **fasion-resize-annotation-train.csv**, **fasion-resize-annotation-train.csv**. Put these four files under the ```fashion_data``` directory.
-- generate the pose heatmaps. Launch
+- Generate the pose heatmaps. Launch
 ```bash
 python tool/generate_pose_map_fashion.py
 ```
