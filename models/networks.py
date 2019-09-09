@@ -8,7 +8,7 @@ import numpy as np
 import torch.nn.functional as F
 
 import sys
-from models.model_variants import PATNetwork, PATNetwork_with_deform
+from models.model_variants import PATNetwork, PATNetwork_Fine
 
 def weights_init_normal(m):
     classname = m.__class__.__name__
@@ -114,10 +114,10 @@ def define_G(input_nc, output_nc, ngf, which_model_netG, norm='batch', use_dropo
         assert len(input_nc) == 2
         netG = PATNetwork(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout,
                                            n_blocks=9, gpu_ids=gpu_ids, n_downsampling=n_downsampling)
-    elif which_model_netG == 'PATN_Deform':
+    elif which_model_netG == 'PATN_Fine':
         assert len(input_nc) == 2
         norm_layer = get_norm_layer(norm_type='batch')
-        netG = PATNetwork_with_deform(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout,
+        netG = PATNetwork_Fine(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout,
                                          n_blocks=6, gpu_ids=gpu_ids, n_downsampling=n_downsampling)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % which_model_netG)

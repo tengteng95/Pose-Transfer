@@ -7,9 +7,9 @@ def create_model(opt):
         assert opt.dataset_mode == 'keypoint'
         from .PATN import TransferModel
         model = TransferModel()
-    elif opt.model == 'PATN_Deform':
+    elif opt.model == 'PATN_Fine':
         assert opt.dataset_mode == 'key_segments'
-        from .PATN_Deform import TransferModel
+        from .PATN_Fine import TransferModel
         model = TransferModel()
 
     else:

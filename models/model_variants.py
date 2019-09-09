@@ -272,10 +272,10 @@ def gen_enc_fea_all_parts_cuda(rawFea, srcBox, dstBox):
 
     return maskNewFea
 
-class PATModel_with_Deform(nn.Module):
+class PATModel_Fine(nn.Module):
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, n_blocks=6, gpu_ids=[], padding_type='reflect', n_downsampling=2):
         assert(n_blocks >= 0 and type(input_nc) == list)
-        super(PATModel_with_Deform, self).__init__()
+        super(PATModel_Fine, self).__init__()
         self.input_nc_s1 = input_nc[0]
         self.input_nc_s2 = input_nc[1]
         self.output_nc = output_nc
@@ -404,12 +404,12 @@ class PATModel_with_Deform(nn.Module):
 
 
 
-class PATNetwork_with_deform(nn.Module):
+class PATNetwork_Fine(nn.Module):
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, n_blocks=6, gpu_ids=[], padding_type='reflect', n_downsampling=2):
-        super(PATNetwork_with_deform, self).__init__()
+        super(PATNetwork_Fine, self).__init__()
         assert type(input_nc) == list and len(input_nc) == 2, 'Att_v2 take input_nc in format of list only!!'
         self.gpu_ids = gpu_ids
-        self.model = PATModel_with_Deform(input_nc, output_nc, ngf, norm_layer, use_dropout, n_blocks, gpu_ids, padding_type, n_downsampling=n_downsampling)
+        self.model = PATModel_Fine(input_nc, output_nc, ngf, norm_layer, use_dropout, n_blocks, gpu_ids, padding_type, n_downsampling=n_downsampling)
 
     def forward(self, input):
         # return self.model(input)

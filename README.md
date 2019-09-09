@@ -83,7 +83,7 @@ OR you can download our generated pose estimations from here. (Coming soon.) -->
 
 DeepFashion
 ```bash
-python train.py --dataroot ./fashion_data/ --name fashion_PATN_Deform --model PATN_Deform --lambda_GAN 5 --lambda_A 1 --lambda_B 1 --lambda_style 10 --dataset_mode key_segments --n_layers 3 --norm instance --batchSize 4 --pool_size 0 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN_Deform --niter 500 --niter_decay 200 --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-train.csv --L1_type l1_plus_seperate_segments_style --which_model_netD resnet_in --n_layers_D 3 --with_D_PP 1 --with_D_PB 1  --display_id 0 --no_lsgan
+python train.py --dataroot ./fashion_data/ --name fashion_PATN_Fine --model PATN_Fine --lambda_GAN 5 --lambda_A 1 --lambda_B 1 --lambda_style 10 --dataset_mode key_segments --n_layers 3 --norm instance --batchSize 4 --pool_size 0 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN_Fine --niter 500 --niter_decay 200 --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-train.csv --L1_type l1_plus_seperate_segments_style --which_model_netD resnet_in --n_layers_D 3 --with_D_PP 1 --with_D_PB 1  --display_id 0 --no_lsgan
 ```
 
 
@@ -91,7 +91,7 @@ python train.py --dataroot ./fashion_data/ --name fashion_PATN_Deform --model PA
 
 DeepFashion
 ```bash
-python test.py --dataroot ./fashion_data/ --name fashion_PATN_Deform --model PATN_Deform --phase test --dataset_mode key_segments --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN_Deform --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results
+python test.py --dataroot ./fashion_data/ --name fashion_PATN_Fine --model PATN_Fine --phase test --dataset_mode key_segments --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN_Fine --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results
 ```
 
 ### Evaluation
