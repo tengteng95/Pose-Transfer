@@ -27,7 +27,7 @@ Video generation with a single image as input. More details can be found in the 
 
 ## News 
 - We have released a new branch **PATN_Fine**. We introduce a segment-based skip-connection and a novel segment-based style loss, achieving even better results on DeepFashion.
-- [Video demo](https://youtu.be/bNHFPMX9BVk) is available now. We further improve the performance of our model by introducing a revised version of the [deformable skip-connections](https://github.com/AliaksandrSiarohin/pose-gan). We will release the code soon. Refer to our [supplementary materials](http://arxiv.org/abs/1904.03349) for more details. 
+- [Video demo](https://youtu.be/bNHFPMX9BVk) is available now. We further improve the performance of our model by introducing a segment-based skip-connection. We will release the code soon. Refer to our [supplementary materials](http://arxiv.org/abs/1904.03349) for more details. 
 - Codes for pytorch 1.0 is available now under the branch **pytorch_v1.0**. The same results on both datasets can be reproduced with the pretrained model. 
 
 ### Notes:
