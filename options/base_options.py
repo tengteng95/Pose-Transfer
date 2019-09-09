@@ -54,6 +54,7 @@ class BaseOptions():
         self.parser.add_argument('--G_n_downsampling', type=int, default=2, help='down-sampling blocks for generator')
         self.parser.add_argument('--D_n_downsampling', type=int, default=2, help='down-sampling blocks for discriminator')
 
+        self.parser.add_argument('--nsegments', type=int, default=7, help='number of body segments')
         self.initialized = True
 
     def parse(self):

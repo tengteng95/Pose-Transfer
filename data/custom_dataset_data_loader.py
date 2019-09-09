@@ -8,6 +8,9 @@ def CreateDataset(opt):
     if opt.dataset_mode == 'keypoint':
         from data.keypoint import KeyDataset
         dataset = KeyDataset()
+    elif opt.dataset_mode == 'key_segments':
+        from data.keypoint_part import KeyDataset
+        dataset = KeyDataset()
 
     else:
         raise ValueError("Dataset [%s] not recognized." % opt.dataset_mode)
