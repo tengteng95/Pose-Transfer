@@ -3,7 +3,7 @@
 ## News
 In this branch, we introduce a **segment-based skip-connection** and a novel **segment-based style loss**, achieving even better results on DeepFashion.
 
-<img src='imgs/PATN_Fine.jpeg' width="814"/>
+<img src='imgs/PATN_Fine.png' width="800"/>
 
 Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). 
 
