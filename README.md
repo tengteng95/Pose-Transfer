@@ -17,8 +17,6 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
 </p>
 
 
-<img src='imgs/PATN_Fine.pdf' width="100"/>
-
 ## Requirement
 * pytorch(0.3.1)
 * torchvision(0.2.0)
