@@ -1,4 +1,8 @@
 # Pose-Transfer
+
+## News
+In this branch, we introduce a **segment-based skip-connection** and a novel **segment-based style loss**, achieving even better results on DeepFashion.
+
 Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). 
 
 <p float="center">
@@ -12,6 +16,8 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
     <img src='imgs/dance3.gif' width="100"/>
 </p>
 
+
+<img src='imgs/PATN_Fine.pdf' width="100"/>
 
 ## Requirement
 * pytorch(0.3.1)
