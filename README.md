@@ -29,6 +29,7 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
 * pandas
 * tqdm
 * dominate
+* RoiAlign
 
 
 ## Getting Started
@@ -39,6 +40,10 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
 git clone https://github.com/tengteng95/Pose-Transfer.git
 cd Pose-Transfer
 ```
+
+- Install RoiAlign:
+Please visit [here](https://github.com/longcw/RoIAlign.pytorch) for details.
+
 
 ### Data Preperation
 We provide our **dataset split files** and **extracted keypoints files** for convience.
