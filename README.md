@@ -73,10 +73,10 @@ python tool/generate_pose_map_market.py
 
 #### DeepFashion
 
-**Note: we crop the images of DeepFashion into the resolution of 176x256 in a center-crop manner.**
+**Note: In our settings, we crop the images of DeepFashion into the resolution of 176x256 in a center-crop manner.**
 <!-- - Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html) -->
 - Download [deep fasion dataset in-shop clothes retrival benchmark](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html). You will need to ask a pasword from dataset maintainers. 
-- Split the raw images into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). Launch
+- Split the raw images into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). Crop the images. Launch
 ```bash
 python tool/generate_fashion_datasets.py
 ``` 
