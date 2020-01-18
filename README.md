@@ -1,5 +1,38 @@
 # Pose-Transfer
-Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). The video demo is coming soon.
+Code for the paper **Progressive Pose Attention for Person Image Generation** in **CVPR19(Oral)**. The paper is available [here](http://arxiv.org/abs/1904.03349). 
+
+<p float="center">
+	<img src='imgs/women1.jpg' width="100"/>
+  	<img src='imgs/walkfront.gif' width="100"/>
+  	<img src='imgs/women2.jpg' width="100"/>
+	<img src='imgs/dance.gif' width="100"/>
+	<img src='imgs/women3.jpg' width="100"/>
+    <img src='imgs/dance2.gif' width="100"/>
+    <img src='imgs/women4.jpg' width="100"/>
+    <img src='imgs/dance3.gif' width="100"/>
+</p>
+
+Video generation with a single image as input. More details can be found in the supplementary materials in our [paper](http://arxiv.org/abs/1904.03349).
+
+
+<!-- <figure class="fourth">
+	<img src='imgs/walkfront.gif' width="100"/>
+	<img src='imgs/dance.gif' width="100"/>
+    <img src='imgs/dance2.gif' width="100"/>
+    <img src='imgs/dance3.gif' width="100"/>
+</figure> -->
+
+<!-- <img src='imgs/walkfront.gif' width=100>
+<img src='imgs/dance.gif' width=100> -->
+
+## News 
+- We have released a new branch **PATN_Fine**. We introduce a segment-based skip-connection and a novel segment-based style loss, achieving even better results on DeepFashion.
+- [Video demo](https://youtu.be/bNHFPMX9BVk) is available now. We further improve the performance of our model by introducing a segment-based skip-connection. We will release the code soon. Refer to our [supplementary materials](http://arxiv.org/abs/1904.03349) for more details. 
+- Codes for pytorch 1.0 is available now under the branch **pytorch_v1.0**. The same results on both datasets can be reproduced with the pretrained model. 
+
+### Notes:
+In pytorch 1.0, **running_mean** and **running_var** are not saved for the **Instance Normalization layer** by default. To reproduce our result in the paper, launch ``python tool/rm_insnorm_running_vars.py`` to remove corresponding keys in the pretrained model. (Only for the DeepFashion dataset.)
+
 
 <img src='imgs/results.png' width=800>
 
@@ -27,7 +60,7 @@ cd Pose-Transfer
 
 ### Data Preperation
 
-We use [OpenPose](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation) to generate keypoints. We also provide our extracted keypoints files for convience.
+We use [OpenPose](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation) to generate keypoints, and provide our **dataset split files** and **extracted keypoints files** for convience.
 
 #### Market1501
 - Download the Market-1501 dataset from [here](http://www.liangzheng.com.cn/Project/project_reid.html). Rename **bounding_box_train** and **bounding_box_test** to **train** and **test**, and put them under the ```market_data``` directory.
@@ -39,9 +72,11 @@ python tool/generate_pose_map_market.py
 
 
 #### DeepFashion
+
+**Note: In our settings, we crop the images of DeepFashion into the resolution of 176x256 in a center-crop manner.**
 <!-- - Download the DeepFashion dataset from [here](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html) -->
 - Download [deep fasion dataset in-shop clothes retrival benchmark](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html). You will need to ask a pasword from dataset maintainers. 
-- Split the raw images into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). Launch
+- Split the raw images into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). Crop the images. Launch
 ```bash
 python tool/generate_fashion_datasets.py
 ``` 
@@ -49,6 +84,25 @@ python tool/generate_fashion_datasets.py
 - Generate the pose heatmaps. Launch
 ```bash
 python tool/generate_pose_map_fashion.py
+```
+
+#### Notes:
+**Optionally, you can also generate these files by yourself.**
+
+1. Keypoints files
+
+We use [OpenPose](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation) to generate keypoints. 
+
+- Download pose estimator from [Google Drive](https://drive.google.com/open?id=1YMsYXc41dR3k8YroXeWGh9zweNUQmZBw) or [Baidu Disk](https://pan.baidu.com/s/1fcMwXTUk9XKPLpaJSodTrg). Put it under the root folder ``Pose-Transfer``.
+- Change the paths **input_folder**  and **output_path** in ``tool/compute_coordinates.py``. And then launch
+```bash
+python2 compute_coordinates.py
+```
+
+2. Dataset split files
+
+```bash
+python2 tool/create_pairs_dataset.py
 ```
 
 <!-- #### Pose Estimation
@@ -72,13 +126,13 @@ python train.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --la
 ### Test the model
 Market1501
 ```bash
-python test.py --dataroot ./market_data/ --name market_PATN --model PATN --phase test --dataset_mode keypoint --norm batch --batchSize 1 --resize_or_crop no --gpu_ids 2 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-test.csv --which_epoch latest --results_dir ./results
+python test.py --dataroot ./market_data/ --name market_PATN --model PATN --phase test --dataset_mode keypoint --norm batch --batchSize 1 --resize_or_crop no --gpu_ids 2 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./market_data/market-pairs-test.csv --which_epoch latest --results_dir ./results --display_id 0
 ```
 
 
 DeepFashion
 ```bash
-python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --phase test --dataset_mode keypoint --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results
+python test.py --dataroot ./fashion_data/ --name fashion_PATN --model PATN --phase test --dataset_mode keypoint --norm instance --batchSize 1 --resize_or_crop no --gpu_ids 0 --BP_input_nc 18 --no_flip --which_model_netG PATN --checkpoints_dir ./checkpoints --pairLst ./fashion_data/fasion-resize-pairs-test.csv --which_epoch latest --results_dir ./results --display_id 0
 ```
 
 ### Evaluation
