@@ -2,19 +2,22 @@ from __future__ import absolute_import
 
 import torch
 from torch import nn
-from torch.autograd import Variable
-import numpy as np
+# from torch.autograd import Variable
+# import numpy as np
 import torch.nn.functional as F
 import torchvision.models as models
 
-from roi_align.roi_align import RoIAlign
+import torchvision.ops as tops
 
-def to_varabile(arr, requires_grad=False, is_cuda=True):
-    tensor = torch.from_numpy(arr)
-    if is_cuda:
-        tensor = tensor.cuda()
-    var = Variable(tensor, requires_grad=requires_grad)
-    return var
+
+# from roi_align.roi_align import RoIAlign
+
+# def to_varabile(arr, requires_grad=False, is_cuda=True):
+#     tensor = torch.from_numpy(arr)
+#     if is_cuda:
+#         tensor = tensor.cuda()
+#     var = Variable(tensor, requires_grad=requires_grad)
+#     return var
 
 # gram matrix and loss
 class GramMatrix(nn.Module):
@@ -26,6 +29,7 @@ class GramMatrix(nn.Module):
         G.div_(c * h * w)
         return G
 
+
 class GramMSELoss(nn.Module):
     def forward(self, input, target):
         out = nn.MSELoss()(GramMatrix()(input), GramMatrix()(target))
@@ -34,23 +38,31 @@ class GramMSELoss(nn.Module):
 
 class SegmentsSeperateStyleLoss(nn.Module):
     # PARTS_NAME = ['head', 'Larm', 'Rarm', 'belly', 'Lleg', 'Rleg', 'hip']
-    def __init__(self, nsegments, lambda_L1, lambda_perceptual, lambda_style, perceptual_layers, gpu_ids, roi_output_size=
-                [[16, 16], [16, 7], [16, 7], [32, 32], [32, 7], [32, 7], [16, 16]]):
+    def __init__(self, nsegments, lambda_L1, lambda_perceptual, lambda_style, perceptual_layers, gpu_ids,
+                 roi_output_size=
+                 [[16, 16], [16, 7], [16, 7], [32, 32], [32, 7], [32, 7], [16, 16]]):
         super(SegmentsSeperateStyleLoss, self).__init__()
         self.nsegments = nsegments
-        self.align_layer_lists = nn.ModuleList([RoIAlign(x[0], x[1], transform_fpcoor=True) for x in roi_output_size])
+        self.align_layer_lists = nn.ModuleList(
+            [tops.RoIAlign(output_size=(x[0], x[1]), spatial_scale=1.0, sampling_ratio=-1, aligned=True) for x in roi_output_size])
         # print(self.align_layer_lists)
         self.lambda_L1 = lambda_L1
         self.lambda_perceptual = lambda_perceptual
         self.lambda_style = lambda_style
         self.gpu_ids = gpu_ids
+        # if not isinstance(self.gpu_ids, list):
+        #
+        # if len(self.gpu_ids) > 0:
+        #     self.is_cuda = True
+        # else:
+        #     self.is_cuda = False
 
         vgg = models.vgg19(pretrained=True).features
         for param in vgg.parameters():
             param.requires_grad = False
         self.vgg_submodel = nn.Sequential()
-        for i,layer in enumerate(list(vgg)):
-            self.vgg_submodel.add_module(str(i),layer)
+        for i, layer in enumerate(list(vgg)):
+            self.vgg_submodel.add_module(str(i), layer)
             if i == perceptual_layers:
                 break
         self.vgg_submodel = self.vgg_submodel.cuda(gpu_ids)
@@ -66,7 +78,9 @@ class SegmentsSeperateStyleLoss(nn.Module):
                 bbox = rois[i, seg, :].cpu().int().numpy()
                 if bbox[0] == bbox[1] == bbox[2] == bbox[3] == 0:
                     continue
+                # index represents which batch index it comes from
                 indexes[seg].append(i)
+                # result represent the bbox coordinates, x1, y1, x2, y2
                 results[seg].append(bbox)
         return indexes, results
 
@@ -81,23 +95,23 @@ class SegmentsSeperateStyleLoss(nn.Module):
         mean[0] = 0.485
         mean[1] = 0.456
         mean[2] = 0.406
-        mean = Variable(mean)
-        mean = mean.resize(1, 3, 1, 1)
+        # mean = Variable(mean)
+        mean = mean.view(1, 3, 1, 1)
         mean = mean.cuda(self.gpu_ids)
 
         std = torch.FloatTensor(3)
         std[0] = 0.229
         std[1] = 0.224
         std[2] = 0.225
-        std = Variable(std)
-        std = std.resize(1, 3, 1, 1)
+        # std = Variable(std)
+        std = std.view(1, 3, 1, 1)
         std = std.cuda(self.gpu_ids)
 
-        fake_p2_norm = (inputs + 1)/2 # [-1, 1] => [0, 1]
-        fake_p2_norm = (fake_p2_norm - mean)/std
+        fake_p2_norm = (inputs + 1) / 2  # [-1, 1] => [0, 1]
+        fake_p2_norm = (fake_p2_norm - mean) / std
 
-        input_p2_norm = (targets + 1)/2 # [-1, 1] => [0, 1]
-        input_p2_norm = (input_p2_norm - mean)/std
+        input_p2_norm = (targets + 1) / 2  # [-1, 1] => [0, 1]
+        input_p2_norm = (input_p2_norm - mean) / std
 
         fake_p2_norm_perceptual = self.vgg_submodel(fake_p2_norm)
         input_p2_norm_perceptual = self.vgg_submodel(input_p2_norm)
@@ -106,22 +120,24 @@ class SegmentsSeperateStyleLoss(nn.Module):
 
         for i in range(self.nsegments):
             # perceptual loss
-            boxes_array = np.asarray(boxes_data[i],dtype=np.float32)
+            boxes_array = torch.Tensor(boxes_data[i]).type(dtype=torch.float32)
+            box_index_array = torch.Tensor(box_index_data[i]).unsqueeze(1).type(dtype=torch.int)
+            boxes = torch.cat((box_index_array, boxes_array), dim=1).cuda(self.gpu_ids)
             if boxes_array.shape[0] == 0:
                 if i == 0:
                     loss_style = 0
                 else:
                     loss_style += 0
                 continue
-            boxes = to_varabile(np.asarray(boxes_data[i],dtype=np.float32), requires_grad=False, is_cuda=True)
-            box_index = to_varabile(np.asarray(box_index_data[i],dtype=np.int32), requires_grad=False, is_cuda=True)
 
-            fake_perceptual_segments = self.align_layer_lists[i](fake_p2_norm_perceptual, boxes, box_index)
-            input_perceptual_segments_no_grad = self.align_layer_lists[i](input_p2_norm_perceptual_no_grad, boxes, box_index)
+            fake_perceptual_segments = self.align_layer_lists[i](fake_p2_norm_perceptual, boxes)
+            input_perceptual_segments_no_grad = self.align_layer_lists[i](input_p2_norm_perceptual_no_grad, boxes)
             if i == 0:
-                loss_style = GramMSELoss()(fake_perceptual_segments, input_perceptual_segments_no_grad) * self.lambda_style
+                loss_style = GramMSELoss()(fake_perceptual_segments,
+                                           input_perceptual_segments_no_grad) * self.lambda_style
             else:
-                loss_style += GramMSELoss()(fake_perceptual_segments, input_perceptual_segments_no_grad) * self.lambda_style
+                loss_style += GramMSELoss()(fake_perceptual_segments,
+                                            input_perceptual_segments_no_grad) * self.lambda_style
 
         # input_perceptual_segments_no_grad = input_perceptual_segments.detach()
 
@@ -129,6 +145,3 @@ class SegmentsSeperateStyleLoss(nn.Module):
         loss = loss_l1 + loss_style + loss_perceptual
 
         return loss, loss_l1, loss_perceptual, loss_style
-
-
-

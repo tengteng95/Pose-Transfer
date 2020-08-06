@@ -1,9 +1,6 @@
 import numpy as np
 import torch
-import os
 from collections import OrderedDict
-from torch.autograd import Variable
-import itertools
 import util.util as util
 from util.image_pool import ImagePool
 from .base_model import BaseModel
@@ -11,11 +8,6 @@ from . import networks
 # losses
 from losses.SegmentsStyleLoss import SegmentsSeperateStyleLoss
 
-import sys
-import torch.nn.functional as F
-import torchvision.models as models
-import torchvision.transforms as transforms
-import torch.nn as nn
 
 class TransferModel(BaseModel):
     def name(self):
@@ -23,23 +15,22 @@ class TransferModel(BaseModel):
 
     def initialize(self, opt):
         BaseModel.initialize(self, opt)
-
-        nb = opt.batchSize
-        size = opt.fineSize
         self.phase = opt.phase
-        self.input_P1_set = self.Tensor(nb, opt.P_input_nc, size, size)
-        self.input_BP1_set = self.Tensor(nb, opt.BP_input_nc, size, size)
-        self.input_P2_set = self.Tensor(nb, opt.P_input_nc, size, size)
-        self.input_BP2_set = self.Tensor(nb, opt.BP_input_nc, size, size)
-        self.input_BBox1_set = self.Tensor(nb, opt.nsegments, 4)
-        self.input_BBox2_set = self.Tensor(nb, opt.nsegments, 4)
+        # self.input_P1_set = self.Tensor(nb, opt.P_input_nc, size, size)
+        # self.input_BP1_set = self.Tensor(nb, opt.BP_input_nc, size, size)
+        # self.input_P2_set = self.Tensor(nb, opt.P_input_nc, size, size)
+        # self.input_BP2_set = self.Tensor(nb, opt.BP_input_nc, size, size)
+        # self.input_BBox1_set = self.Tensor(nb, opt.nsegments, 4)
+        # self.input_BBox2_set = self.Tensor(nb, opt.nsegments, 4)
         self.num_of_Goutput = 1
 
         input_nc = [opt.P_input_nc, opt.BP_input_nc+opt.BP_input_nc]
         self.netG = networks.define_G(input_nc, opt.P_input_nc,
                                         opt.ngf, opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids,
                                         # num. of down-sampling blocks
-                                        n_downsampling=opt.G_n_downsampling)
+                                        n_downsampling=opt.G_n_downsampling,
+                                        norm_affine=opt.norm_affine
+                                      )
 
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
@@ -101,30 +92,38 @@ class TransferModel(BaseModel):
         print('-----------------------------------------------')
 
     def set_input(self, input):
-        input_P1, input_BP1 = input['P1'], input['BP1']
-        input_P2, input_BP2 = input['P2'], input['BP2']
+        self.input_P1, self.input_BP1 = input['P1'], input['BP1']
+        self.input_P2, self.input_BP2 = input['P2'], input['BP2']
 
-        self.input_P1_set.resize_(input_P1.size()).copy_(input_P1)
-        self.input_BP1_set.resize_(input_BP1.size()).copy_(input_BP1)
-        self.input_P2_set.resize_(input_P2.size()).copy_(input_P2)
-        self.input_BP2_set.resize_(input_BP2.size()).copy_(input_BP2)
+        # self.input_P1_set.resize_(input_P1.size()).copy_(input_P1)
+        # self.input_BP1_set.resize_(input_BP1.size()).copy_(input_BP1)
+        # self.input_P2_set.resize_(input_P2.size()).copy_(input_P2)
+        # self.input_BP2_set.resize_(input_BP2.size()).copy_(input_BP2)
 
-        input_BBox1, input_BBox2 = input['BBox1'], input['BBox2']
-        self.input_BBox1_set.resize_(input_BBox1.size()).copy_(input_BBox1)
-        self.input_BBox2_set.resize_(input_BBox2.size()).copy_(input_BBox2)
+        self.input_BBox1, self.input_BBox2 = input['BBox1'], input['BBox2']
+        # self.input_BBox1_set.resize_(input_BBox1.size()).copy_(input_BBox1)
+        # self.input_BBox2_set.resize_(input_BBox2.size()).copy_(input_BBox2)
 
         self.image_paths = input['P1_path'][0] + '___' + input['P2_path'][0]
 
+        if len(self.gpu_ids) > 0:
+            self.input_P1 = self.input_P1.cuda()
+            self.input_BP1 = self.input_BP1.cuda()
+            self.input_P2 = self.input_P2.cuda()
+            self.input_BP2 = self.input_BP2.cuda()
+            self.input_BBox1 = self.input_BBox1.cuda()
+            self.input_BBox2 = self.input_BBox1.cuda()
+
 
     def forward(self):
-        self.input_P1 = Variable(self.input_P1_set)
-        self.input_BP1 = Variable(self.input_BP1_set)
-
-        self.input_P2 = Variable(self.input_P2_set)
-        self.input_BP2 = Variable(self.input_BP2_set)
-
-        self.input_BBox1 = Variable(self.input_BBox1_set)
-        self.input_BBox2 = Variable(self.input_BBox2_set)
+        # self.input_P1 = Variable(self.input_P1_set)
+        # self.input_BP1 = Variable(self.input_BP1_set)
+        #
+        # self.input_P2 = Variable(self.input_P2_set)
+        # self.input_BP2 = Variable(self.input_BP2_set)
+        #
+        # self.input_BBox1 = Variable(self.input_BBox1_set)
+        # self.input_BBox2 = Variable(self.input_BBox2_set)
 
         G_input = [self.input_P1,
                    torch.cat((self.input_BP1, self.input_BP2), 1), 
@@ -134,14 +133,14 @@ class TransferModel(BaseModel):
         self.fake_p2 = self.netG(G_input)
 
     def test(self):
-        self.input_P1 = Variable(self.input_P1_set)
-        self.input_BP1 = Variable(self.input_BP1_set)
-
-        self.input_P2 = Variable(self.input_P2_set)
-        self.input_BP2 = Variable(self.input_BP2_set)
-        
-        self.input_BBox1 = Variable(self.input_BBox1_set)
-        self.input_BBox2 = Variable(self.input_BBox2_set)
+        # self.input_P1 = Variable(self.input_P1_set)
+        # self.input_BP1 = Variable(self.input_BP1_set)
+        #
+        # self.input_P2 = Variable(self.input_P2_set)
+        # self.input_BP2 = Variable(self.input_BP2_set)
+        #
+        # self.input_BBox1 = Variable(self.input_BBox1_set)
+        # self.input_BBox2 = Variable(self.input_BBox2_set)
 
         G_input = [self.input_P1,
                    torch.cat((self.input_BP1, self.input_BP2), 1), 
@@ -177,7 +176,7 @@ class TransferModel(BaseModel):
 
 
         # L1 loss
-        l1_losses = self.criterionL1(self.fake_p2, self.input_P2, self.input_BBox2_set)
+        l1_losses = self.criterionL1(self.fake_p2, self.input_P2, self.input_BBox2)
         self.loss_l1_all = l1_losses[0]
         self.loss_originL1 = l1_losses[1]
         self.loss_perceptual = l1_losses[2]
@@ -189,8 +188,8 @@ class TransferModel(BaseModel):
 
         pair_loss.backward()
 
-        self.pair_L1loss = pair_L1loss.data[0]
-        self.pair_GANloss = pair_GANloss.data[0]
+        self.pair_L1loss = pair_L1loss.item()
+        self.pair_GANloss = pair_GANloss.item()
 
 
     def backward_D_basic(self, netD, real, fake):
@@ -209,16 +208,16 @@ class TransferModel(BaseModel):
     # D: take(P, B) as input
     def backward_D_PB(self):
         real_PB = torch.cat((self.input_P2, self.input_BP2), 1)
-        fake_PB = self.fake_PB_pool.query( torch.cat((self.fake_p2, self.input_BP2), 1).data )
+        fake_PB = self.fake_PB_pool.query(torch.cat((self.fake_p2, self.input_BP2), 1))
         loss_D_PB = self.backward_D_basic(self.netD_PB, real_PB, fake_PB)
-        self.loss_D_PB = loss_D_PB.data[0]
+        self.loss_D_PB = loss_D_PB.item()
 
     # D: take(P, P') as input
     def backward_D_PP(self):
         real_PP = torch.cat((self.input_P2, self.input_P1), 1)
-        fake_PP = self.fake_PP_pool.query( torch.cat((self.fake_p2, self.input_P1), 1).data )
+        fake_PP = self.fake_PP_pool.query(torch.cat((self.fake_p2, self.input_P1), 1))
         loss_D_PP = self.backward_D_basic(self.netD_PP, real_PP, fake_PP)
-        self.loss_D_PP = loss_D_PP.data[0]
+        self.loss_D_PP = loss_D_PP.item()
 
 
     def optimize_parameters(self):
@@ -266,7 +265,6 @@ class TransferModel(BaseModel):
         input_BP2 = util.draw_pose_from_map(self.input_BP2.data)[0]
 
         fake_p2 = util.tensor2im(self.fake_p2.data)
-        
 
         vis = np.zeros((height, width*5, 3)).astype(np.uint8) #h, w, c
         vis[:, :width, :] = input_P1
@@ -274,7 +272,6 @@ class TransferModel(BaseModel):
         vis[:, width*2:width*3, :] = input_P2
         vis[:, width*3:width*4, :] = input_BP2
         vis[:, width*4:, :] = fake_p2
-
 
         ret_visuals = OrderedDict([('vis', vis)])
 

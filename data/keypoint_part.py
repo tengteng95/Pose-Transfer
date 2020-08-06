@@ -57,6 +57,9 @@ class KeyDataset(BaseDataset):
         BBox1 = np.load(BBox1_path)
         BBox2 = np.load(BBox2_path)
 
+        BBox1 = torch.from_numpy(BBox1)
+        BBox2 = torch.from_numpy(BBox2)
+
         BP1 = torch.from_numpy(BP1_img).float() #h, w, c
         BP1 = BP1.transpose(2, 0) #c,w,h
         BP1 = BP1.transpose(2, 1) #c,h,w 
@@ -70,7 +73,6 @@ class KeyDataset(BaseDataset):
         
         return {'P1': P1, 'BP1': BP1, 'P2': P2, 'BP2': BP2, 'BBox1': BBox1, 'BBox2': BBox2,
                 'P1_path': P1_name, 'P2_path': P2_name}
-                
 
     def __len__(self):
         if self.opt.phase == 'train':

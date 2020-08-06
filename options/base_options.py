@@ -30,6 +30,8 @@ class BaseOptions():
         self.parser.add_argument('--nThreads', default=2, type=int, help='# threads for loading data')
         self.parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
         self.parser.add_argument('--norm', type=str, default='instance', help='instance normalization or batch normalization')
+        self.parser.add_argument('--norm_affine', type=int, default=0,
+                                 help='whether use affine parameters in the generator')
         self.parser.add_argument('--serial_batches', action='store_true', help='if true, takes images in order to make batches, otherwise takes them randomly')
         self.parser.add_argument('--display_winsize', type=int, default=256,  help='display window size')
         self.parser.add_argument('--display_id', type=int, default=1, help='window id of the web display')
