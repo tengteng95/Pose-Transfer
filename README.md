@@ -1,7 +1,9 @@
 # Pose-Transfer
 
 ## News
-In this branch, we introduce a **segment-based skip-connection** and a novel **segment-based style loss**, achieving even better results on DeepFashion.
+**Exciting news**: in this branch, we migrate the ```PATN_Fine``` branch from pytorch 0.3.1 to the latest pytorch 1.6.0. Since the new torchvision gives official support for ```RoIAlign``` operation, this new branch of codes no longer requires to install a third-party RoIAlign as mentioned in the ```PATN_Fine``` branch.
+
+Besides, we introduce a **segment-based skip-connection** and a novel **segment-based style loss**, achieving even better results on DeepFashion.
 
 <img src='imgs/PATN_Fine.png' width="800"/>
 
@@ -20,8 +22,8 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
 
 
 ## Requirement
-* pytorch(0.3.1)
-* torchvision(0.2.0)
+* pytorch(1.6.0)
+* torchvision(0.7.0)
 * numpy
 * scipy
 * scikit-image
@@ -29,7 +31,6 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
 * pandas
 * tqdm
 * dominate
-* RoiAlign
 
 
 ## Getting Started
@@ -39,10 +40,8 @@ Code for the paper **Progressive Pose Attention for Person Image Generation** in
 ```bash
 git clone https://github.com/tengteng95/Pose-Transfer.git
 cd Pose-Transfer
+git checkout -b PATN_Fine_pytorch1.6
 ```
-
-- Install RoiAlign:
-Please visit [here](https://github.com/longcw/RoIAlign.pytorch) for details.
 
 
 ### Data Preperation
