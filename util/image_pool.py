@@ -1,7 +1,7 @@
 import random
 import numpy as np
 import torch
-from torch.autograd import Variable
+# from torch.autograd import Variable
 
 
 class ImagePool():
@@ -13,7 +13,8 @@ class ImagePool():
 
     def query(self, images):
         if self.pool_size == 0:
-            return Variable(images)
+            # return Variable(images)
+            return images
         return_images = []
         for image in images:
             image = torch.unsqueeze(image, 0)
@@ -30,5 +31,5 @@ class ImagePool():
                     return_images.append(tmp)
                 else:
                     return_images.append(image)
-        return_images = Variable(torch.cat(return_images, 0))
+        return_images = torch.cat(return_images, 0)
         return return_images

@@ -17,6 +17,7 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 import torch.nn as nn
 
+
 class TransferModel(BaseModel):
     def name(self):
         return 'TransferModel'
@@ -31,26 +32,29 @@ class TransferModel(BaseModel):
         self.input_P2_set = self.Tensor(nb, opt.P_input_nc, size, size)
         self.input_BP2_set = self.Tensor(nb, opt.BP_input_nc, size, size)
 
-        input_nc = [opt.P_input_nc, opt.BP_input_nc+opt.BP_input_nc]
+        input_nc = [opt.P_input_nc, opt.BP_input_nc + opt.BP_input_nc]
         self.netG = networks.define_G(input_nc, opt.P_input_nc,
-                                        opt.ngf, opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids,
-                                        n_downsampling=opt.G_n_downsampling)
+                                      opt.ngf, opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type,
+                                      self.gpu_ids,
+                                      n_downsampling=opt.G_n_downsampling,
+                                      norm_affine=opt.norm_affine
+                                      )
 
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
             if opt.with_D_PB:
-                self.netD_PB = networks.define_D(opt.P_input_nc+opt.BP_input_nc, opt.ndf,
-                                            opt.which_model_netD,
-                                            opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type, self.gpu_ids,
-                                            not opt.no_dropout_D,
-                                            n_downsampling = opt.D_n_downsampling)
+                self.netD_PB = networks.define_D(opt.P_input_nc + opt.BP_input_nc, opt.ndf,
+                                                 opt.which_model_netD,
+                                                 opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type, self.gpu_ids,
+                                                 not opt.no_dropout_D,
+                                                 n_downsampling=opt.D_n_downsampling)
 
             if opt.with_D_PP:
-                self.netD_PP = networks.define_D(opt.P_input_nc+opt.P_input_nc, opt.ndf,
-                                            opt.which_model_netD,
-                                            opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type, self.gpu_ids,
-                                            not opt.no_dropout_D,
-                                            n_downsampling = opt.D_n_downsampling)
+                self.netD_PP = networks.define_D(opt.P_input_nc + opt.P_input_nc, opt.ndf,
+                                                 opt.which_model_netD,
+                                                 opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type, self.gpu_ids,
+                                                 not opt.no_dropout_D,
+                                                 n_downsampling=opt.D_n_downsampling)
 
         if not self.isTrain or opt.continue_train:
             which_epoch = opt.which_epoch
@@ -60,7 +64,6 @@ class TransferModel(BaseModel):
                     self.load_network(self.netD_PB, 'netD_PB', which_epoch)
                 if opt.with_D_PP:
                     self.load_network(self.netD_PP, 'netD_PP', which_epoch)
-
 
         if self.isTrain:
             self.old_lr = opt.lr
@@ -72,7 +75,8 @@ class TransferModel(BaseModel):
             if opt.L1_type == 'origin':
                 self.criterionL1 = torch.nn.L1Loss()
             elif opt.L1_type == 'l1_plus_perL1':
-                self.criterionL1 = L1_plus_perceptualLoss(opt.lambda_A, opt.lambda_B, opt.perceptual_layers, self.gpu_ids, opt.percep_is_l1)
+                self.criterionL1 = L1_plus_perceptualLoss(opt.lambda_A, opt.lambda_B, opt.perceptual_layers,
+                                                          self.gpu_ids, opt.percep_is_l1)
             else:
                 raise Excption('Unsurportted type of L1!')
             # initialize optimizers
@@ -112,7 +116,6 @@ class TransferModel(BaseModel):
 
         self.image_paths = input['P1_path'][0] + '___' + input['P2_path'][0]
 
-
     def forward(self):
         self.input_P1 = Variable(self.input_P1_set)
         self.input_BP1 = Variable(self.input_BP1_set)
@@ -123,7 +126,6 @@ class TransferModel(BaseModel):
         G_input = [self.input_P1,
                    torch.cat((self.input_BP1, self.input_BP2), 1)]
         self.fake_p2 = self.netG(G_input)
-
 
     def test(self):
         self.input_P1 = Variable(self.input_P1_set)
@@ -136,11 +138,9 @@ class TransferModel(BaseModel):
                    torch.cat((self.input_BP1, self.input_BP2), 1)]
         self.fake_p2 = self.netG(G_input)
 
-
     # get image paths
     def get_image_paths(self):
         return self.image_paths
-
 
     def backward_G(self):
         if self.opt.with_D_PB:
@@ -152,14 +152,13 @@ class TransferModel(BaseModel):
             self.loss_G_GAN_PP = self.criterionGAN(pred_fake_PP, True)
 
         # L1 loss
-        if self.opt.L1_type == 'l1_plus_perL1' :
+        if self.opt.L1_type == 'l1_plus_perL1':
             losses = self.criterionL1(self.fake_p2, self.input_P2)
             self.loss_G_L1 = losses[0]
             self.loss_originL1 = losses[1].data[0]
             self.loss_perceptual = losses[2].data[0]
         else:
             self.loss_G_L1 = self.criterionL1(self.fake_p2, self.input_P2) * self.opt.lambda_A
-
 
         pair_L1loss = self.loss_G_L1
         if self.opt.with_D_PB:
@@ -182,7 +181,6 @@ class TransferModel(BaseModel):
         if self.opt.with_D_PB or self.opt.with_D_PP:
             self.pair_GANloss = pair_GANloss.data[0]
 
-
     def backward_D_basic(self, netD, real, fake):
         # Real
         pred_real = netD(real)
@@ -200,7 +198,7 @@ class TransferModel(BaseModel):
     def backward_D_PB(self):
         real_PB = torch.cat((self.input_P2, self.input_BP2), 1)
         # fake_PB = self.fake_PB_pool.query(torch.cat((self.fake_p2, self.input_BP2), 1))
-        fake_PB = self.fake_PB_pool.query( torch.cat((self.fake_p2, self.input_BP2), 1).data )
+        fake_PB = self.fake_PB_pool.query(torch.cat((self.fake_p2, self.input_BP2), 1).data)
         loss_D_PB = self.backward_D_basic(self.netD_PB, real_PB, fake_PB)
         self.loss_D_PB = loss_D_PB.data[0]
 
@@ -208,10 +206,9 @@ class TransferModel(BaseModel):
     def backward_D_PP(self):
         real_PP = torch.cat((self.input_P2, self.input_P1), 1)
         # fake_PP = self.fake_PP_pool.query(torch.cat((self.fake_p2, self.input_P1), 1))
-        fake_PP = self.fake_PP_pool.query( torch.cat((self.fake_p2, self.input_P1), 1).data )
+        fake_PP = self.fake_PP_pool.query(torch.cat((self.fake_p2, self.input_P1), 1).data)
         loss_D_PP = self.backward_D_basic(self.netD_PP, real_PP, fake_PP)
         self.loss_D_PP = loss_D_PP.data[0]
-
 
     def optimize_parameters(self):
         # forward
@@ -235,9 +232,8 @@ class TransferModel(BaseModel):
                 self.backward_D_PB()
                 self.optimizer_D_PB.step()
 
-
     def get_current_errors(self):
-        ret_errors = OrderedDict([ ('pair_L1loss', self.pair_L1loss)])
+        ret_errors = OrderedDict([('pair_L1loss', self.pair_L1loss)])
         if self.opt.with_D_PP:
             ret_errors['D_PP'] = self.loss_D_PP
         if self.opt.with_D_PB:
@@ -261,21 +257,20 @@ class TransferModel(BaseModel):
 
         fake_p2 = util.tensor2im(self.fake_p2.data)
 
-        vis = np.zeros((height, width*5, 3)).astype(np.uint8) #h, w, c
+        vis = np.zeros((height, width * 5, 3)).astype(np.uint8)  # h, w, c
         vis[:, :width, :] = input_P1
-        vis[:, width:width*2, :] = input_BP1
-        vis[:, width*2:width*3, :] = input_P2
-        vis[:, width*3:width*4, :] = input_BP2
-        vis[:, width*4:, :] = fake_p2
+        vis[:, width:width * 2, :] = input_BP1
+        vis[:, width * 2:width * 3, :] = input_P2
+        vis[:, width * 3:width * 4, :] = input_BP2
+        vis[:, width * 4:, :] = fake_p2
 
         ret_visuals = OrderedDict([('vis', vis)])
 
         return ret_visuals
 
     def save(self, label):
-        self.save_network(self.netG,  'netG',  label, self.gpu_ids)
+        self.save_network(self.netG, 'netG', label, self.gpu_ids)
         if self.opt.with_D_PB:
-            self.save_network(self.netD_PB,  'netD_PB',  label, self.gpu_ids)
+            self.save_network(self.netD_PB, 'netD_PB', label, self.gpu_ids)
         if self.opt.with_D_PP:
             self.save_network(self.netD_PP, 'netD_PP', label, self.gpu_ids)
-

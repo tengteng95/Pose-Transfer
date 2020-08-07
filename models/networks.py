@@ -2,23 +2,24 @@ import torch
 import torch.nn as nn
 from torch.nn import init
 import functools
-from torch.autograd import Variable
+# from torch.autograd import Variable
 from torch.optim import lr_scheduler
 import numpy as np
 import torch.nn.functional as F
 
 import sys
-from models.model_variants import PATNetwork
+from models.model_variants import PATNetwork, PATNetwork_Fine
+
 
 def weights_init_normal(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
-        init.normal(m.weight.data, 0.0, 0.02)
+        init.normal_(m.weight.data, 0.0, 0.02)
     elif classname.find('Linear') != -1:
-        init.normal(m.weight.data, 0.0, 0.02)
+        init.normal_(m.weight.data, 0.0, 0.02)
     elif classname.find('BatchNorm2d') != -1:
-        init.normal(m.weight.data, 1.0, 0.02)
-        init.constant(m.bias.data, 0.0)
+        init.normal_(m.weight.data, 1.0, 0.02)
+        init.constant_(m.bias.data, 0.0)
 
 
 def weights_init_xavier(m):
@@ -37,24 +38,24 @@ def weights_init_kaiming(m):
     classname = m.__class__.__name__
     # print(classname)
     if classname.find('Conv') != -1:
-        init.kaiming_normal(m.weight.data, a=0, mode='fan_in')
+        init.kaiming_normal_(m.weight.data, a=0, mode='fan_in')
     elif classname.find('Linear') != -1:
-        init.kaiming_normal(m.weight.data, a=0, mode='fan_in')
+        init.kaiming_normal_(m.weight.data, a=0, mode='fan_in')
     elif classname.find('BatchNorm2d') != -1:
-        init.normal(m.weight.data, 1.0, 0.02)
-        init.constant(m.bias.data, 0.0)
+        init.normal_(m.weight.data, 1.0, 0.02)
+        init.constant_(m.bias.data, 0.0)
 
 
 def weights_init_orthogonal(m):
     classname = m.__class__.__name__
     print(classname)
     if classname.find('Conv') != -1:
-        init.orthogonal(m.weight.data, gain=1)
+        init.orthogonal_(m.weight.data, gain=1)
     elif classname.find('Linear') != -1:
-        init.orthogonal(m.weight.data, gain=1)
+        init.orthogonal_(m.weight.data, gain=1)
     elif classname.find('BatchNorm2d') != -1:
-        init.normal(m.weight.data, 1.0, 0.02)
-        init.constant(m.bias.data, 0.0)
+        init.normal_(m.weight.data, 1.0, 0.02)
+        init.constant_(m.bias.data, 0.0)
 
 
 def init_weights(net, init_type='normal'):
@@ -71,13 +72,13 @@ def init_weights(net, init_type='normal'):
         raise NotImplementedError('initialization method [%s] is not implemented' % init_type)
 
 
-def get_norm_layer(norm_type='instance'):
+def get_norm_layer(norm_type='instance', norm_affine=True):
     if norm_type == 'batch':
         norm_layer = functools.partial(nn.BatchNorm2d, affine=True)
     elif norm_type == 'batch_sync':
         norm_layer = BatchNorm2d
     elif norm_type == 'instance':
-        norm_layer = functools.partial(nn.InstanceNorm2d, affine=False)
+        norm_layer = functools.partial(nn.InstanceNorm2d, affine=norm_affine)
     elif norm_type == 'none':
         norm_layer = None
     else:
@@ -102,10 +103,11 @@ def get_scheduler(optimizer, opt):
 
 
 def define_G(input_nc, output_nc, ngf, which_model_netG, norm='batch', use_dropout=False, init_type='normal',
-             gpu_ids=[], n_downsampling=2):
+             gpu_ids=[], n_downsampling=2, norm_affine=1):
     netG = None
     use_gpu = len(gpu_ids) > 0
-    norm_layer = get_norm_layer(norm_type=norm)
+    t_or_f = True if norm_affine else False
+    norm_layer = get_norm_layer(norm_type=norm, norm_affine=t_or_f)
 
     if use_gpu:
         assert (torch.cuda.is_available())
@@ -114,6 +116,10 @@ def define_G(input_nc, output_nc, ngf, which_model_netG, norm='batch', use_dropo
         assert len(input_nc) == 2
         netG = PATNetwork(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout,
                                            n_blocks=9, gpu_ids=gpu_ids, n_downsampling=n_downsampling)
+    elif which_model_netG == 'PATN_Fine':
+        assert len(input_nc) == 2
+        netG = PATNetwork_Fine(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout,
+                                         n_blocks=6, gpu_ids=gpu_ids, n_downsampling=n_downsampling)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % which_model_netG)
     if len(gpu_ids) > 0:
@@ -134,7 +140,12 @@ def define_D(input_nc, ndf, which_model_netD,
 
     if which_model_netD == 'resnet':
         netD = ResnetDiscriminator(input_nc, ndf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=n_layers_D,
-                                   gpu_ids=[], padding_type='reflect', use_sigmoid=use_sigmoid,
+                                   gpu_ids=gpu_ids, padding_type='reflect', use_sigmoid=use_sigmoid,
+                                   n_downsampling=n_downsampling)
+    elif which_model_netD == 'resnet_in':
+        norm_layer = get_norm_layer(norm_type='instance')
+        netD = ResnetDiscriminator(input_nc, ndf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=n_layers_D,
+                                   gpu_ids=gpu_ids, padding_type='reflect', use_sigmoid=use_sigmoid,
                                    n_downsampling=n_downsampling)
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' %
@@ -176,20 +187,20 @@ class GANLoss(nn.Module):
             self.loss = nn.BCELoss()
 
     def get_target_tensor(self, input, target_is_real):
-        target_tensor = None
+        # target_tensor = None
         if target_is_real:
             create_label = ((self.real_label_var is None) or
                             (self.real_label_var.numel() != input.numel()))
             if create_label:
-                real_tensor = self.Tensor(input.size()).fill_(self.real_label)
-                self.real_label_var = Variable(real_tensor, requires_grad=False)
+                self.real_label_var = self.Tensor(input.size()).fill_(self.real_label)
+                # self.real_label_var = Variable(real_tensor, requires_grad=False)
             target_tensor = self.real_label_var
         else:
             create_label = ((self.fake_label_var is None) or
                             (self.fake_label_var.numel() != input.numel()))
             if create_label:
-                fake_tensor = self.Tensor(input.size()).fill_(self.fake_label)
-                self.fake_label_var = Variable(fake_tensor, requires_grad=False)
+                self.fake_label_var = self.Tensor(input.size()).fill_(self.fake_label)
+                # self.fake_label_var = Variable(fake_tensor, requires_grad=False)
             target_tensor = self.fake_label_var
         return target_tensor
 
