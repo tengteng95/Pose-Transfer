@@ -272,7 +272,7 @@ def gen_enc_fea_all_parts_cuda(rawFea, srcBox, dstBox):
 
             _newFea = F.grid_sample(maskRawFea, grid, mode='nearest', padding_mode='border')
 
-            maskNewFea[ind, :, dy1:dy2, dx1:dx2] += maskNewFea[ind, :, dy1:dy2, dx1:dx2]
+            maskNewFea[ind, :, dy1:dy2, dx1:dx2] += _newFea[0]
 
     # maskNewFea = Variable(maskNewFea).cuda()
     return maskNewFea

@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.ndimage.filters import gaussian_filter
 from skimage.draw import circle, line_aa, polygon
 import json
 
@@ -7,9 +6,6 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from collections import defaultdict
-import skimage.measure, skimage.transform
-import sys
 
 LIMB_SEQ = [[1,2], [1,5], [2,3], [3,4], [5,6], [6,7], [1,8], [8,9],
            [9,10], [1,11], [11,12], [12,13], [1,0], [0,14], [14,16],
