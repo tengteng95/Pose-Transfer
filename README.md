@@ -49,7 +49,6 @@ We provide our **dataset split files** and **extracted keypoints files** for con
 
 
 #### DeepFashion
-#### **Note: In our settings, we crop the raw images into the resolution of 176x256 in a center-crop manner.**
 
 - Download [deep fasion dataset in-shop clothes retrival benchmark](http://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html). You will need to ask a pasword from dataset maintainers. 
 - Split the raw images into the train split (```fashion_data/train```) and the test split (```fashion_data/test```). Crop the images. Launch
