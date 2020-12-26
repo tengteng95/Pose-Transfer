@@ -1,0 +1,19 @@
+# Data files
+fashion_data/*
+custom_data/*
+market_data/*
+
+
+# Model weights
+checkpoints/*
+
+# Test results
+results/*
+
+# Raw data
+DeepFashion
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
