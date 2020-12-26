@@ -17,3 +17,6 @@ DeepFashion
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
+# Jupyter Notebook
+.ipynb_checkpoints
