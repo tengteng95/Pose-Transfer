@@ -1,6 +1,9 @@
 # Data files
 fashion_data/*
-custom_data/*
+custom_data/*.csv
+custom_data/*/*.png
+custom_data/*/*.npy
+custom_data/*.png
 market_data/*
 
 
