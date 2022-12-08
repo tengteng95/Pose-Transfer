@@ -1,5 +1,5 @@
 bleach==1.5.0
-certifi==2019.3.9
+certifi==2022.12.7
 cloudpickle==0.8.1
 cycler==0.10.0
 dask==1.1.5
